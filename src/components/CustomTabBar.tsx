@@ -2,20 +2,29 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ImageSourcePropType } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import NavigationItem from './NavigationItem';
-import iconOverview from '../../assets/icon-overview.png';
-import iconOrder from '../../assets/icon-overview.png';
-import iconArea from '../../assets/icon-area.png';
-import iconFee from '../../assets/icon-fee.png';
-import iconUltility from '../../assets/icon-ultility.png';
-import iconOverviewActive from '../../assets/icon-overview-active.png';
-import iconOrderActive from '../../assets/icon-order-active.png';
-import iconAreaActive from '../../assets/icon-area.png';
-import iconFeeActive from '../../assets/icon-fee.png';
-import iconUltilityActive from '../../assets/icon-ultility.png';
+// import iconOverview from '../../assets/icon-overview.png';
+// import iconOrder from '../../assets/icon-overview.png';
+// import iconArea from '../../assets/icon-area.png';
+// import iconFee from '../../assets/icon-fee.png';
+// import iconUltility from '../../assets/icon-ultility.png';
+// import iconOverviewActive from '../../assets/icon-overview-active.png';
+// import iconOrderActive from '../../assets/icon-order-active.png';
+// import iconAreaActive from '../../assets/icon-area.png';
+// import iconFeeActive from '../../assets/icon-fee.png';
+// import iconUltilityActive from '../../assets/icon-ultility.png';
 
-import { Asset } from 'expo-asset';
+import iconOverview from '../../assets/icon-document.svg';
+import iconOrder from '../../assets/icon-document.svg';
+import iconArea from '../../assets/icon-document.svg';
+import iconFee from '../../assets/icon-document.svg';
+import iconUltility from '../../assets/icon-document.svg';
+import iconOverviewActive from '../../assets/icon-document.svg';
+import iconOrderActive from '../../assets/icon-document.svg';
+import iconAreaActive from '../../assets/icon-document.svg';
+import iconFeeActive from '../../assets/icon-document.svg';
+import iconUltilityActive from '../../assets/icon-document.svg';
 
-
+import { SvgProps } from 'react-native-svg';
 
 
 const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
@@ -27,8 +36,8 @@ const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
         const isFocused = state.index === index;
 
         // Determine icon name based on route
-        let iconName: ImageSourcePropType;
-        let iconFocus: ImageSourcePropType;
+        let iconName: React.FC<SvgProps>;
+        let iconFocus: React.FC<SvgProps>;
         let name: string;
         switch (route.name) {
             case 'Overview':

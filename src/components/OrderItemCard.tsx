@@ -1,13 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-import iconDocument from '../../assets/icon-document.png';
-import iconGift from '../../assets/icon-gift.png';
-import iconBill from '../../assets/icon-bill.png';
-import iconScan from '../../assets/icon-scan.png';
-import iconBillGray from '../../assets/icon-bill-gray.png';
-import iconClockGray from '../../assets/icon-clock-gray.png';
-import iconPersonGray from '../../assets/icon-double-person-gray.png';
-import iconTicketGray from '../../assets/icon-ticket-gray.png';
+
 
 export type ItemCardProps = {
   backgroundColor?: string;

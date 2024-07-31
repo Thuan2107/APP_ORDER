@@ -1,25 +1,23 @@
 import {ImageSourcePropType, View, Text, StyleSheet, Image } from 'react-native';
-
+import { SvgProps } from 'react-native-svg';
 
 export type NavigationItemProps = {
   name?: string;
-  icon?: ImageSourcePropType;
+  icon?: React.FC<SvgProps>;
   isFocused?: boolean;
 };
 
-const NavigationItem = ({name, icon, isFocused}: NavigationItemProps) => {
+const NavigationItem: React.FC<NavigationItemProps> = ({name, icon: Icon, isFocused}: NavigationItemProps) => {
 
 
   const styles = createStyles({isFocused});
 
   return (
     <View style={styles.itemWrapper} >
-        <View style={styles.itemIcon} >
-          <Image
-            source={icon}
-          /> 
-        </View>
-        <Text style={styles.itemName}>{name}</Text>
+      <View style={styles.itemIcon}>
+        {Icon && <Icon width={24} height={24} fill={isFocused ? 'blue' : 'gray'} />}
+      </View>
+      <Text style={styles.itemName}>{name}</Text>
     </View>
   )
   
