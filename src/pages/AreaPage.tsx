@@ -1,13 +1,11 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ListRenderItem, FlatList, ToastAndroid } from 'react-native';
+import TableItemCard from '../components/TableItemCard';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../utils/axiosInstance';
+import { TABLE_STATUS } from '../constants/TableStatusConstants';
+import { useNavigation } from '@react-navigation/native';
 
-import iconDocument from '../../assets/icon-document.png';
-import iconGift from '../../assets/icon-gift.png';
-import iconBill from '../../assets/icon-bill.png';
-import iconScan from '../../assets/icon-scan.png';
-import iconBillGray from '../../assets/icon-bill-gray.png';
-import iconClockGray from '../../assets/icon-clock-gray.png';
-import iconPersonGray from '../../assets/icon-double-person-gray.png';
-import iconTicketGray from '../../assets/icon-ticket-gray.png';
+
 
 export type ItemCardProps = {
   backgroundColor?: string;
@@ -16,110 +14,96 @@ export type ItemCardProps = {
 };
 
 const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
+  const navigation = useNavigation<any>();
+  const [tables, setTables] = useState<TableModel[]>([]);
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const data = await fetchTables();
+        
+        setTables(data.data)
+      } catch (err) {
+      }
+    };
+
+    loadOrders();
+  }, []);
+  
+  const fetchTables = async () => {
+    try {
+      const response = await axiosInstance.get('/tables', {
+        params: {
+          area_id: -1,
+          branch_id: 2879,
+          buffet_ticket_id: 0,
+        },
+        headers: {
+          Method: '0', // Custom header for Method
+        },
+      });
+      return response.data;
+    } catch (error) {
+      // Handle error as needed
+      console.error('API call error:', error);
+      throw error;
+    }
+  };
+
+  const onTableItemClick = (orderId: number) => {
+    if(orderId){
+      navigation.navigate('OrderDetail', { orderId: orderId });
+    }else{
+      navigation.navigate('FoodMenu');
+    }
+  }
 
 
   const styles = createStyles({backgroundColor, textColor, defaultColor});
 
-  return (
-    <View style={styles.orderWrapper} >
-      <Text style={styles.orderLeftStatus}>Khu vực</Text>
+  const renderItem = ({ item }: { item: TableModel }) => (
+    <View style={styles.tableItem}>
+      <TableItemCard
+        backgroundColor={TABLE_STATUS[item.status].color}
+        tableName={item.name}
+        onTableClick={() => onTableItemClick(item.order_id)}
+      />
     </View>
+  );
+
+  return (
+    <View style={styles.tablePage}>
+      <View style={styles.tableWrapper}>
+        <FlatList
+          data={tables}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          numColumns={3} // Adjust the number of columns as needed
+        />
+      </View>
+    </View>
+    
   )
   
 }
 
 const createStyles = ({ backgroundColor, textColor, defaultColor }: ItemCardProps) => StyleSheet.create({
-  orderWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 20,
-    alignItems: 'center',
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.08, // 14 in hex is about 8% in decimal
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  orderLeft: {
-    flex: 7
-  },
-  orderLeftStatus: {
-    backgroundColor: backgroundColor,
-    fontSize: 12,
-    paddingVertical: 7,
-    paddingHorizontal: 0,
-    marginBottom: 2,
-    borderRadius: 4,
-    textTransform: 'uppercase',
-    color: textColor,
-    textAlign: 'center'
-  },
-  orderLeftName: {  
-    backgroundColor: backgroundColor,
-    fontSize: 24,
-    paddingVertical: 18,
-    paddingHorizontal: 0,
-    borderRadius: 4,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    color: textColor,
-    textAlign: 'center'
-  },
-  orderLeftAction: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 4,
-    justifyContent: 'space-between',
-    marginTop: 4
-  },
-  orderLeftActionItem: {
+  tablePage: {
+    width: '100%',
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    height: 32,
-    backgroundColor: backgroundColor,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 4,
   },
-  orderRight: {
-    flex: 5,
-  },
-  orderRightTotalAmount: {
-    flex: 5,
-    fontSize: 24,
-    color: textColor,
-    fontWeight: '600',
-    textAlign: 'right'
-  },
-  orderRightInfo: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 6
-  },
-  orderRightItemRow: {
-    display: 'flex',
-    gap: 4,
-    color: '#C5C6C9',
+  tableWrapper: {
+    width: '100%',
     flexDirection: 'row',
-    alignItems: 'center'
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
-  orderRightItemIcon: {
-    width: 16,
-    height: 16,
-  },
-  orderRightItemText: {
-   fontSize: 14,
-   fontWeight: '500',
-   color: defaultColor,
-   alignItems: 'center'
-  },
-  iconAction: {
-    color: 'red'
+  tableItem: {
+    display: 'flex',
+    minWidth: '33%',
+    marginBottom: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 

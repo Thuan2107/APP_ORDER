@@ -1,38 +1,54 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import NavigationItem from './src/components/NavigationItem';
+import { createStackNavigator } from '@react-navigation/stack';
 import CustomTabBar from './src/components/CustomTabBar';
 import OverviewPage from './src/pages/OverviewPage';
 import OrderPage from './src/pages/OrderPage';
 import AreaPage from './src/pages/AreaPage';
 import FeePage from './src/pages/FeePage';
 import UltilityPage from './src/pages/UltilityPage';
+import React from 'react';
+import OrderDetailPage from './src/modules/order/pages/OrderDetailPage';
+import FoodMenuPage from './src/modules/food-menu/pages/FoodMenuPage';
+
+
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        tabBar={(props) => <CustomTabBar {...props} />}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            // You can customize tabBarIcon here if needed
-            return null; // Use the custom tab bar instead
-          },
-        })}
-      >
-        <Tab.Screen name="Overview" component={OverviewPage} />
-        <Tab.Screen name="Order" component={OrderPage} />
-        <Tab.Screen name="Area" component={AreaPage} />
-        <Tab.Screen name="Fee" component={FeePage} />
-        <Tab.Screen name="Ultility" component={UltilityPage} />
-      </Tab.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name="Main" component={MainTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderDetail" component={OrderDetailPage} />
+        <Stack.Screen name="FoodMenu" component={FoodMenuPage} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
+const MainTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          return null; // Use the custom tab bar instead
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Overview" component={OverviewPage} />
+      <Tab.Screen name="Order" component={OrderPage} />
+      <Tab.Screen name="Area" component={AreaPage} />
+      <Tab.Screen name="Fee" component={FeePage} />
+      <Tab.Screen name="Ultility" component={UltilityPage} />
+    </Tab.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
   container: {

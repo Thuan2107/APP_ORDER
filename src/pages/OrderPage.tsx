@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, FlatList, ListRenderItem } from 'react-native';
 import axiosInstance from '../utils/axiosInstance';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Order } from '../models/OrderModel';
 import OrderItemCard from '../components/OrderItemCard';
 import { ORDER_STATUS } from '../constants/OrderStatusConstants';
 import { formatPriceVND } from '../utils/appUtils';
+import { useNavigation } from '@react-navigation/native';
 
 export type ItemCardProps = {
   backgroundColor?: string;
@@ -14,6 +15,9 @@ export type ItemCardProps = {
 
 const OrderPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const navigation = useNavigation<any>();
+  const styles = createStyles({backgroundColor, textColor, defaultColor});
+
   useEffect(() => {
     const loadOrders = async () => {
       try {
@@ -31,7 +35,7 @@ const OrderPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) =>
       const response = await axiosInstance.get('/orders', {
         params: {
           employee_id: 0,
-          branch_id: 3101,
+          branch_id: 2879,
           order_status: '0,1,4',
           is_take_away: -1,
         },
@@ -46,29 +50,35 @@ const OrderPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) =>
       throw error;
     }
   };
-  const styles = createStyles({backgroundColor, textColor, defaultColor});
+
+  const onOrderItemClick = (orderId: number) => {
+    navigation.navigate('OrderDetail', { orderId: orderId });
+
+  }
+
+  const renderItem: ListRenderItem<Order> = ({ item }) => (
+    <OrderItemCard
+      backgroundColor={ORDER_STATUS[item.order_status].colorBackground}
+      textColor={ORDER_STATUS[item.order_status].colorText}
+      defaultColor='#C5C6C9'
+      orderStatus={ORDER_STATUS[item.order_status].text}
+      orderName={item.table_name}
+      orderTotalAmount={formatPriceVND(item.total_amount)}
+      orderId={item.id}
+      orderTime={item.created_at}
+      orderTotalPerson={item.using_slot}
+      onOrderItemClick={() => onOrderItemClick(item.id)}
+    />
+  );
 
   return (
-    <ScrollView style={styles.orderPageWrapper}>
-      { orders.length > 0 && (
-        orders.map((order) => (
-          <OrderItemCard 
-            key={order.id}
-            backgroundColor = '#CCE3F1'
-            textColor = '#0071BB'
-            defaultColor = '#C5C6C9'
-            orderStatus = {ORDER_STATUS[order.order_status]}
-            orderName = {order.table_name}
-            orderTotalAmount = {formatPriceVND(order.total_amount)}
-            orderId = {order.id}
-            orderTime = {order.created_at}
-            orderTotalPerson = {order.using_slot}
-          />
-        ))
-      )
-        
-      }
-    </ScrollView>
+    <View style={styles.orderPageWrapper}>
+      <FlatList
+        data={orders}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+      />
+    </View>
   )
   
 }

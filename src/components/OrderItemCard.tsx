@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+
+import IconMore from '../../assets/icon-more.svg'
+import IconGift from '../../assets/icon-gift.svg'
+import IconBill from '../../assets/icon-document.svg'
+import IconScan from '../../assets/icon-scan.svg'
+import IconDocumentGray from '../../assets/icon-document-gray.svg'
+import IconClockGray from '../../assets/icon-clock-gray.svg'
+import IconDoubleUserGray from '../../assets/icon-double-user-gray.svg'
 
 
 
@@ -12,6 +20,7 @@ export type ItemCardProps = {
   orderId?: number;
   orderTime?: string;
   orderTotalPerson?: number;
+  onOrderItemClick?: () => void;  
 };
 
 const OrderItemCard = ({
@@ -23,38 +32,30 @@ const OrderItemCard = ({
   orderTotalAmount,
   orderId,
   orderTime,
-  orderTotalPerson}: ItemCardProps) => {
+  orderTotalPerson,
+  onOrderItemClick}: ItemCardProps) => {
 
 
   const styles = createStyles({backgroundColor, textColor, defaultColor});
 
   return (
-    <View style={styles.orderWrapper} >
+    <TouchableOpacity style={styles.orderWrapper} onPress={onOrderItemClick} >
         <View style={styles.orderLeft}>
             <Text style={styles.orderLeftStatus}>{orderStatus}</Text>
             <Text style={styles.orderLeftName}>{orderName}</Text>
             <View style={styles.orderLeftAction}>
-            
 
                 <View style={styles.orderLeftActionItem}>
-                  <Image
-                    source={iconDocument}
-                  />
+                  <IconMore color={textColor} />
                 </View>
                 <View style={styles.orderLeftActionItem}>
-                  <Image
-                    source={iconGift}
-                  />
+                  <IconGift color={textColor} />
                 </View>
                 <View style={styles.orderLeftActionItem}>
-                  <Image
-                    source={iconBill}
-                  />
+                  <IconBill color={textColor} />
                 </View>
                 <View style={styles.orderLeftActionItem}>
-                  <Image
-                    source={iconScan}
-                  />
+                  <IconScan color={textColor} />
                 </View>
             </View>
         </View>
@@ -63,43 +64,28 @@ const OrderItemCard = ({
             <View style={styles.orderRightInfo}>
             <View style={styles.orderRightItemRow}>
                 <View style={styles.orderRightItemIcon}>
-                  <Image
-                    source={iconBillGray}
-                  />
+                  <IconDocumentGray color="#C5C6C9" />
                 </View>
                 <Text style={styles.orderRightItemText}>#{orderId}</Text>
                 
             </View>
             <View style={styles.orderRightItemRow}>
               <View style={styles.orderRightItemIcon}>
-                <Image
-                  source={iconClockGray}
-                />
+                <IconClockGray color="#C5C6C9"  />
               </View>
               <Text style={styles.orderRightItemText}>{orderTime}</Text>
                 
             </View>
-            {/* <View style={styles.orderRightItemRow}>
-              <View style={styles.orderRightItemIcon}>
-                <Image
-                  source={iconTicketGray}
-                />
-              </View>
-              <Text style={styles.orderRightItemText}>Frame 197</Text>
-                
-            </View> */}
             <View style={styles.orderRightItemRow}>
               <View style={styles.orderRightItemIcon}>
-                <Image
-                  source={iconPersonGray}
-                />
+                <IconDoubleUserGray color="#C5C6C9" />
               </View>
               <Text style={styles.orderRightItemText}>{orderTotalPerson}</Text>
             </View>
             </View>
             
         </View>
-    </View>
+    </TouchableOpacity>
   )
   
 }

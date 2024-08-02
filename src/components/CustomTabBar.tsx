@@ -2,27 +2,13 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ImageSourcePropType } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import NavigationItem from './NavigationItem';
-// import iconOverview from '../../assets/icon-overview.png';
-// import iconOrder from '../../assets/icon-overview.png';
-// import iconArea from '../../assets/icon-area.png';
-// import iconFee from '../../assets/icon-fee.png';
-// import iconUltility from '../../assets/icon-ultility.png';
-// import iconOverviewActive from '../../assets/icon-overview-active.png';
-// import iconOrderActive from '../../assets/icon-order-active.png';
-// import iconAreaActive from '../../assets/icon-area.png';
-// import iconFeeActive from '../../assets/icon-fee.png';
-// import iconUltilityActive from '../../assets/icon-ultility.png';
 
-import iconOverview from '../../assets/icon-document.svg';
-import iconOrder from '../../assets/icon-document.svg';
-import iconArea from '../../assets/icon-document.svg';
-import iconFee from '../../assets/icon-document.svg';
-import iconUltility from '../../assets/icon-document.svg';
-import iconOverviewActive from '../../assets/icon-document.svg';
-import iconOrderActive from '../../assets/icon-document.svg';
-import iconAreaActive from '../../assets/icon-document.svg';
-import iconFeeActive from '../../assets/icon-document.svg';
-import iconUltilityActive from '../../assets/icon-document.svg';
+
+import IconOverview from '../../assets/icon-overview.svg';
+import IconOrder from '../../assets/icon-document.svg';
+import IconArea from '../../assets/icon-area.svg';
+import IconFee from '../../assets/icon-fee.svg';
+import IconUltility from '../../assets/icon-ultility.svg';
 
 import { SvgProps } from 'react-native-svg';
 
@@ -41,34 +27,28 @@ const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
         let name: string;
         switch (route.name) {
             case 'Overview':
-                iconName = iconOverview; // Use Ionicons names
-                iconFocus = iconOverviewActive;
+                iconName = IconOverview; // Use Ionicons names
                 name = 'Tổng quan'
                 break;
             case 'Order':
-                iconName = iconOrder; // Use Ionicons names
-                iconFocus = iconOrderActive;
+                iconName = IconOrder; // Use Ionicons names
                 name = 'Đơn hàng'
                 break;
             case 'Area':
-                iconName = iconArea; // Use Ionicons names
-                iconFocus = iconAreaActive;
+                iconName = IconArea; // Use Ionicons names
                 name = 'Khu vực'
                 break;
             case 'Fee':
-                iconName = iconFee; // Use Ionicons names
-                iconFocus = iconFee;
+                iconName = IconFee; // Use Ionicons names
                 name = 'Chi phí'
                 break;
             case 'Ultility':
-                iconName = iconUltility; // Use Ionicons names
-                iconFocus = iconUltilityActive;
+                iconName = IconUltility; // Use Ionicons names
                 name = 'Tiện ích'
                 break;
           // Add other cases here
             default:
-                iconName = iconOrder; // Use Ionicons names
-                iconFocus = iconOverview;
+                iconName = IconOrder; // Use Ionicons names
                 name = 'Đơn hàng'
         }
 
@@ -90,7 +70,7 @@ const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
             onPress={onPress}
             style={styles.tab}
           >
-            <NavigationItem name={name} icon={isFocused ? iconFocus : iconName} isFocused={isFocused} />
+            <NavigationItem name={name} icon={iconName} isFocused={isFocused} />
           </TouchableOpacity>
         );
       })}

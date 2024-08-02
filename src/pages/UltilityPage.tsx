@@ -1,34 +1,25 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
-import iconDocument from '../../assets/icon-document.png';
-import iconGift from '../../assets/icon-gift.png';
-import iconBill from '../../assets/icon-bill.png';
-import iconScan from '../../assets/icon-scan.png';
-import iconBillGray from '../../assets/icon-bill-gray.png';
-import iconClockGray from '../../assets/icon-clock-gray.png';
-import iconPersonGray from '../../assets/icon-double-person-gray.png';
-import iconTicketGray from '../../assets/icon-ticket-gray.png';
-
-export type ItemCardProps = {
+type UltilityPageProps = {
   backgroundColor?: string;
   textColor?: string;
   defaultColor?: string;
 };
 
-const UltilityPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
 
-
+const UltilityPage: React.FC<UltilityPageProps> = ({ 
+    backgroundColor,
+    textColor,
+    defaultColor }) => {
   const styles = createStyles({backgroundColor, textColor, defaultColor});
 
   return (
-    <View style={styles.orderWrapper} >
-      <Text style={styles.orderLeftStatus}>Tiện tích</Text>
+    <View style={styles.orderWrapper}>
+      <Text style={styles.orderLeftStatus}>Tiện ích</Text>
     </View>
-  )
-  
-}
-
-const createStyles = ({ backgroundColor, textColor, defaultColor }: ItemCardProps) => StyleSheet.create({
+  );
+};
+const createStyles = ({backgroundColor, textColor, defaultColor}:UltilityPageProps ) => StyleSheet.create({
   orderWrapper: {
     display: 'flex',
     flexDirection: 'row',

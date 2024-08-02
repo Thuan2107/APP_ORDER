@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from 'a
 
 // Create an axios instance with default configurations
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://api.gateway.overate-vntech.com/api/v11', // Base URL for the API
+  baseURL: 'https://beta.api.gateway.overate-vntech.com/api/v11', // Base URL for the API
   timeout: 10000, // Set a timeout if desired
   headers: {
     'Content-Type': 'application/json',
@@ -12,8 +12,8 @@ const axiosInstance: AxiosInstance = axios.create({
 // Add a request interceptor to include default headers
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const authToken = 'fe20368c-9d72-487b-ad43-ad345255e9f6'; // Your actual token
-    const projectId = '8004'; // Your actual project ID
+    const authToken = 'ba1c572e-751f-4899-a2b9-643a82f2193b'; // Your actual token
+    const projectId = '8005'; // Your actual project ID
 
     if (authToken) {
       config.headers = {

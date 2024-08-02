@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1",
     "@types/axios": "^0.14.0",
+    "@types/react-native": "^0.73.0",
     "axios": "^1.7.2",
     "expo": "~51.0.23",
     "expo-status-bar": "~1.12.1",
@@ -31,6 +34,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "metro-react-native-babel-preset": "^0.77.0",
     "react-native-svg-transformer": "^1.5.0",
+    "react-native-swipeable": "^0.6.0",
     "typescript": "^5.5.4"
   },
   "private": true

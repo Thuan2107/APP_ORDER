@@ -15,7 +15,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({name, icon: Icon, isFocu
   return (
     <View style={styles.itemWrapper} >
       <View style={styles.itemIcon}>
-        {Icon && <Icon width={24} height={24} fill={isFocused ? 'blue' : 'gray'} />}
+        {Icon && <Icon width={24} height={24} color={isFocused ? '#1462B0' : '#C5C6C9'} />}
       </View>
       <Text style={styles.itemName}>{name}</Text>
     </View>
