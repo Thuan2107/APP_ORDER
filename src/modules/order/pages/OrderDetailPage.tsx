@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native';
 import HeaderBackPress from '../../../components/HeaderBackPress';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import IconCoin from '../../../../assets/icon-coins.svg';
 import { ORDER_STATUS } from '../../../constants/OrderStatusConstants';
 import imageFoodDefault from '../../../../assets/food-default.png'
@@ -17,6 +17,9 @@ import IconFire from '../../../../assets/icon-fire.svg'
 import IconAddFood from '../../../../assets/icon-add-food.svg'
 import IconSplit from '../../../../assets/icon-split.svg'
 import { FOOD_STATUS } from '../../../constants/FoodStatusConstants';
+import { TYPE_ACTION_ORDER_DETAIL } from '../constants/TypeActionOrderDetailConstants';
+import { Order } from '../../../models/OrderModel';
+
 
 
 const OrderDetailPage = () => {
@@ -100,7 +103,10 @@ const OrderDetailPage = () => {
           ))
         }
       </ScrollView>
-      <ActionBottom backgroundStatusColor={backgroundStatusColor} orderStatusColor={orderStatusColor} />
+      <ActionBottom 
+        orderDetailData={orderDetail}
+        backgroundStatusColor={backgroundStatusColor} 
+        orderStatusColor={orderStatusColor} />
 
     </View>
   )
@@ -115,6 +121,7 @@ type ItemOrderDetailProps = {
   totalPrice?: string;
   foodQuantity?: number;
   foodStatusText?: string;
+  orderDetailData?: OrderDetail;
 };
 
 const FoodItemCard = ({
@@ -298,31 +305,45 @@ const actionBottomStyle = ({backgroundStatusColor, orderStatusColor}: ItemOrderD
 
 })
 
-const ActionBottom = ({backgroundStatusColor, orderStatusColor}: ItemOrderDetailProps) => {
+const ActionBottom = ({backgroundStatusColor, orderStatusColor, orderDetailData}: ItemOrderDetailProps) => {
   const styles = actionBottomStyle({backgroundStatusColor, orderStatusColor});
+  const navigation = useNavigation<any>();
+
+  const actionFromOrderDetail = (type: number) => {
+    switch(type){
+      case TYPE_ACTION_ORDER_DETAIL.ADD_FOOD: {
+        navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name });
+        break;
+      }
+      case TYPE_ACTION_ORDER_DETAIL.ADD_FOOD: {
+        navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name });
+        break;
+      }
+    }
+  }
   return (
     <View style={styles.actionWrapper}>
       <View style={styles.actionRow}>
-        <View style={styles.actionItemWrapper}>
+        <TouchableOpacity onPress={() => actionFromOrderDetail(TYPE_ACTION_ORDER_DETAIL.ADD_OTHER_FOOD)} style={styles.actionItemWrapper}>
           <IconFire style={styles.actionItemIcon} color={orderStatusColor} />
           <Text style={styles.actionItemName}>Thêm khác</Text>
-        </View>
-        <View style={styles.actionItemWrapper}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => actionFromOrderDetail(TYPE_ACTION_ORDER_DETAIL.ADD_FOOD)} style={styles.actionItemWrapper}>
           <IconAddFood style={styles.actionItemIcon} color={orderStatusColor} />
           <Text style={styles.actionItemName}>Thêm món</Text>
-        </View>
-        <View style={styles.actionItemWrapper}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => actionFromOrderDetail(TYPE_ACTION_ORDER_DETAIL.SPLIT_FOOD)} style={styles.actionItemWrapper}>
           <IconSplit style={styles.actionItemIcon} color={orderStatusColor} />
           <Text style={styles.actionItemName}>Tách món</Text>
-        </View>
-        <View style={styles.actionItemWrapper}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => actionFromOrderDetail(TYPE_ACTION_ORDER_DETAIL.GIFT_FOOD)} style={styles.actionItemWrapper}>
           <IconGift style={styles.actionItemIcon} color={orderStatusColor} />
           <Text style={styles.actionItemName}>Quà tặng</Text>
-        </View>
-        <View style={styles.actionItemWrapper}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => actionFromOrderDetail(TYPE_ACTION_ORDER_DETAIL.PAYMENT)} style={styles.actionItemWrapper}>
           <IconPayment style={styles.actionItemIcon} color={orderStatusColor} />
           <Text style={styles.actionItemName}>Thanh toán</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   )

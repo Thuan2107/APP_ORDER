@@ -15,6 +15,7 @@ export type ItemCardProps = {
 
 const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
   const navigation = useNavigation<any>();
+
   const [tables, setTables] = useState<TableModel[]>([]);
   useEffect(() => {
     const loadOrders = async () => {
@@ -49,11 +50,11 @@ const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => 
     }
   };
 
-  const onTableItemClick = (orderId: number) => {
+  const onTableItemClick = (orderId: number, orderName: string) => {
     if(orderId){
-      navigation.navigate('OrderDetail', { orderId: orderId });
+      navigation.navigate('OrderDetail', { orderId });
     }else{
-      navigation.navigate('FoodMenu');
+      navigation.navigate('FoodMenu', { orderId, orderName });
     }
   }
 
@@ -65,7 +66,7 @@ const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => 
       <TableItemCard
         backgroundColor={TABLE_STATUS[item.status].color}
         tableName={item.name}
-        onTableClick={() => onTableItemClick(item.order_id)}
+        onTableClick={() => onTableItemClick(item.order_id, item.name)}
       />
     </View>
   );

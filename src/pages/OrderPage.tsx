@@ -6,6 +6,7 @@ import OrderItemCard from '../components/OrderItemCard';
 import { ORDER_STATUS } from '../constants/OrderStatusConstants';
 import { formatPriceVND } from '../utils/appUtils';
 import { useNavigation } from '@react-navigation/native';
+import { showToast } from '../utils/showToastMessage';
 
 export type ItemCardProps = {
   backgroundColor?: string;
@@ -26,7 +27,6 @@ const OrderPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) =>
       } catch (err) {
       }
     };
-
     loadOrders();
   }, []);
   
