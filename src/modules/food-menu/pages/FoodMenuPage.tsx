@@ -57,7 +57,7 @@ const FoodMenuPage = () => {
                 }
                 return item;
             });
-    
+            
             return updatedList;
         });
     };
@@ -78,23 +78,23 @@ const FoodMenuPage = () => {
     }, []);
     
     const handleListFoodToAdd = (listFoodMenu: Food[]): FoodModelToAdd[] => {
-        const foodToAdd = listFoodMenu.map(foodMenu => {
-            food_name: foodMenu.name;
-            note: '';
-            buy_one_get_one_foods: []; 
-            quantity: foodMenu.quantity;
-            is_allow_print: 0;
-            restaurant_kitchen_place_id: 0;
-            addition_foods: []; 
-            is_gift: 0;
-            restaurant_vat_config_id: 0;
-            price: foodMenu.price;
-            name: "";
-            id: foodMenu.id;
-            discount_percent: 0;
-        })
+        const foodToAdd: FoodModelToAdd[]  = listFoodMenu.filter(foodMenu => foodMenu.isChecked).map(foodMenu => ({
+            food_name: foodMenu.name,
+            note: '',
+            buy_one_get_one_foods: [], 
+            quantity: foodMenu.quantity,
+            is_allow_print: 0,
+            restaurant_kitchen_place_id: 0,
+            addition_foods: [], 
+            is_gift: 0,
+            restaurant_vat_config_id: 0,
+            price: foodMenu.price,
+            name: "",
+            id: foodMenu.id,
+            discount_percent: 0,
+        }))
 
-        return 
+        return foodToAdd
     }
 
       
