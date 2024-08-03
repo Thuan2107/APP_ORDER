@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import axiosInstance from "../../../utils/axiosInstance";
+import { getAuthToken, getProjectId } from "../../../utils/config";
 
 interface TablesResponse {
     status: number;
@@ -15,9 +16,10 @@ export interface TableRequestParams {
 
 
 export const getTableApi = async (params: TableRequestParams): Promise<AxiosResponse<TablesResponse>> => {
-  
+    
     const headers = {
-      Method: '0', // Custom header for Method
+      Method: '0',
+      ProjectId: 8005
     };
   
     return await axiosInstance.get<TablesResponse>('/tables', { params, headers });

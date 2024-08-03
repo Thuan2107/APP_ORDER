@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Food } from "../models/FoodModel";
 import axiosInstance from "../../../utils/axiosInstance";
+import { getAuthToken, getProjectId } from "../../../utils/config";
 
 interface MenuResponse {
     status: number;
@@ -27,9 +28,13 @@ export interface MenuRequestParams {
   }
 
 export const getMenu = async (params: MenuRequestParams): Promise<AxiosResponse<MenuResponse>> => {
-  
+    const authToken = getAuthToken(); // Get authToken from configuration
+    const projectId = getProjectId(); // Get projectId from configuration
+    
     const headers = {
-      Method: '0', // Custom header for Method
+      Method: '0',
+      Authorization: authToken,
+      ProjectId: projectId
     };
   
     return await axiosInstance.get<MenuResponse>('/foods/menu', { params, headers });
