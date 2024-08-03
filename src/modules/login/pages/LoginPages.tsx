@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { FlatList, View, StyleSheet, Text, Image, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native"
 import ImageLogin from '../../../../assets/background.svg'
 import TechresLogo from '../../../../assets/techres-logo.svg'
-import { SvgXml } from "react-native-svg";
-import { Icon } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axiosInstance from "../../../utils/axiosInstance";
+import { ConfigParams, getConfig } from "../api/getConfigApi";
+import { setAuthToken, setProjectId } from "../../../utils/config";
 const { width, height } = Dimensions.get('window');
 const LoginPages = () => {
 
@@ -23,62 +23,23 @@ const LoginPages = () => {
     };
 
     const handleSubmit = async () => {
-        console.log(brand)
-        console.log(password)
-        console.log(account)
-        try {
-            const response = await axiosInstance.get(`/foods/menu`, {
-              params: {
-                  key_search : "",
-                  category_id : -1,
-                  branch_id : 2879,
-                  is_allow_employee_gift : -1,
-                  is_get_restaurant_kitchen_place : -1,
-                  limit : 50,
-                  category_type : -1,
-                  is_out_stock : -1,
-                  page : 1,
-                  area_id : 5897,
-                  status : 1
-              },
-              headers: {
-                Method: '0', // Custom header for Method
-              },
-            });
-            return response.data;
-          } catch (error) {
-            // Handle error as needed
-            console.error('API call error:', error);
-            throw error;
-          }
+        apiGetConfig()
     };
+  
+    const apiGetConfig = async () => {
+        
+        const params: ConfigParams = {
+            project_id: "net.techres.order.api",
+            restaurant_name: brand,
+        };
 
-    const getConfig = async() =>{
         try {
-            const response = await axiosInstance.get(`/foods/menu`, {
-              params: {
-                  key_search : "",
-                  category_id : -1,
-                  branch_id : 2879,
-                  is_allow_employee_gift : -1,
-                  is_get_restaurant_kitchen_place : -1,
-                  limit : 50,
-                  category_type : -1,
-                  is_out_stock : -1,
-                  page : 1,
-                  area_id : 5897,
-                  status : 1
-              },
-              headers: {
-                Method: '0', // Custom header for Method
-              },
-            });
+            const response = await getConfig(params);
+            console.log(response.data);
             return response.data;
-          } catch (error) {
-            // Handle error as needed
-            console.error('API call error:', error);
-            throw error;
-          }
+        } catch (error) {
+            console.error(error); // Handle the error
+        }
     }
 
 
@@ -103,7 +64,7 @@ const LoginPages = () => {
                         value={password}
                         onChangeText={setPassword}
                         style={styles.input}
-                        placeholder="Enter Password"
+                        placeholder="Mật khẩu"
                         placeholderTextColor="#aaa"
                     />
                     <MaterialCommunityIcons

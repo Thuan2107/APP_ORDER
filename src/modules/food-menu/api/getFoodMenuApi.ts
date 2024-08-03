@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Food } from "../models/FoodModel";
 import axiosInstance from "../../../utils/axiosInstance";
+import { getProjectId } from "../../../utils/config";
 
 interface MenuResponse {
     status: number;
@@ -30,6 +31,7 @@ export const getMenu = async (params: MenuRequestParams): Promise<AxiosResponse<
   
     const headers = {
       Method: '0', // Custom header for Method
+    
     };
   
     return await axiosInstance.get<MenuResponse>('/foods/menu', { params, headers });

@@ -3,7 +3,7 @@ import { getAuthToken, getProjectId } from './config';
 
 // Create an axios instance with default configurations
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://beta.api.gateway.overate-vntech.com/api/v11', // Base URL for the API
+  baseURL: 'https://beta.api.gateway.overate-vntech.com', // Base URL for the API
   timeout: 10000, // Set a timeout if desired
   headers: {
     'Content-Type': 'application/json',

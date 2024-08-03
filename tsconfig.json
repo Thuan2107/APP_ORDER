@@ -15,7 +15,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "types": ["react", "react-native", "react-navigation", "react-navigation-stack"],
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
   "include": [
     "src",
