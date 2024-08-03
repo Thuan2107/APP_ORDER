@@ -17,6 +17,7 @@ import { ORDER_STATUS } from "../../../constants/OrderStatusConstants";
 import { useRoute } from "@react-navigation/native";
 import { MenuRequestParams, getMenu } from "../api/getFoodMenuApi";
 import { showToast } from "../../../utils/showToastMessage";
+import { AddFoodRequestBody, FoodModelToAdd, addFoodApi } from "../api/addFoodApi";
 const FoodMenuPage = () => {
     const route = useRoute<any>();
     const { orderId, orderName } = route.params;
@@ -24,6 +25,7 @@ const FoodMenuPage = () => {
     const [isChecked, setIsChecked] = useState(false);
     const isAddFood = listFood.find((food) => food.isChecked)
     const orderStatusColor = ORDER_STATUS[0].colorText
+    const [listFoodToAdd, setListFoodToAdd] = useState<FoodModelToAdd[]>([])
     const handleCheckToggle = (id: number) => {
         setListFood(prevList =>
             prevList.map(item =>
@@ -75,30 +77,66 @@ const FoodMenuPage = () => {
         
     }, []);
     
+    const handleListFoodToAdd = (listFoodMenu: Food[]): FoodModelToAdd[] => {
+        const foodToAdd = listFoodMenu.map(foodMenu => {
+            food_name: foodMenu.name;
+            note: '';
+            buy_one_get_one_foods: []; 
+            quantity: foodMenu.quantity;
+            is_allow_print: 0;
+            restaurant_kitchen_place_id: 0;
+            addition_foods: []; 
+            is_gift: 0;
+            restaurant_vat_config_id: 0;
+            price: foodMenu.price;
+            name: "";
+            id: foodMenu.id;
+            discount_percent: 0;
+        })
+
+        return 
+    }
+
       
-      
-      const fetchMenu = async () => {
+    const fetchMenu = async () => {
         const params: MenuRequestParams = {
-          key_search: "",
-          category_id: -1,
-          branch_id: 2879,
-          is_allow_employee_gift: -1,
-          is_get_restaurant_kitchen_place: -1,
-          limit: 50,
-          category_type: -1,
-          is_out_stock: -1,
-          page: 1,
-          area_id: 5897,
-          status: 1,
+            key_search: "",
+            category_id: -1,
+            branch_id: 2879,
+            is_allow_employee_gift: -1,
+            is_get_restaurant_kitchen_place: -1,
+            limit: 50,
+            category_type: -1,
+            is_out_stock: -1,
+            page: 1,
+            area_id: 5897,
+            status: 1,
         };
-      
+        
         try {
-          const response = await getMenu(params);
-          return response.data;
+            const response = await getMenu(params);
+            return response.data;
         } catch (error) {
-          console.error(error); // Handle the error
+            console.error(error); // Handle the error
         }
-      };
+    };
+
+    const callApiAddFood = async (orderId: number) => {
+        const body: AddFoodRequestBody = {
+            foods: listFoodToAdd,
+            branch_id: 2879
+        }
+
+        try {
+            const response = await addFoodApi(orderId, body);
+            return response.data;
+        } catch (error) {
+            console.error(error); // Handle the error
+        }
+    }
+
+
+
     const renderItem: ListRenderItem<Food> = ({ item }) => (
         <ItemFood
             name={item.name}

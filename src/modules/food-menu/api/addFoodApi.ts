@@ -27,12 +27,12 @@ export interface FoodModelToAdd {
   discount_percent: number;
 }
 
-interface AddFoodRequestBody {
+export interface AddFoodRequestBody {
   foods: FoodModelToAdd[];
   branch_id: number;
 }
 
-export const getMenu = async (orderId: number, body: AddFoodRequestBody): Promise<AxiosResponse<AddFoodResponse>> => {
+export const addFoodApi = async (orderId: number, body: AddFoodRequestBody): Promise<AxiosResponse<AddFoodResponse>> => {
     const url = `/orders/${orderId}/add-food`
     const headers = {
       Method: '1', // Custom header for Method
