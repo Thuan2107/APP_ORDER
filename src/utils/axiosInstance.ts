@@ -12,8 +12,8 @@ const axiosInstance: AxiosInstance = axios.create({
 // Add a request interceptor to include default headers
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const authToken = 'ba1c572e-751f-4899-a2b9-643a82f2193b'; // Your actual token
-    const projectId = '8005'; // Your actual project ID
+    const authToken = getAuthToken(); // Lấy authToken từ cấu hình
+    const projectId = getProjectId(); // Lấy projectId từ cấu hình
 
     if (authToken) {
       config.headers = {

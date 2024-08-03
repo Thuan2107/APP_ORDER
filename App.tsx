@@ -12,18 +12,20 @@ import UltilityPage from './src/pages/UltilityPage';
 import React from 'react';
 import OrderDetailPage from './src/modules/order/pages/OrderDetailPage';
 import FoodMenuPage from './src/modules/food-menu/pages/FoodMenuPage';
-
+import LoginPages from './src/modules/login/pages/LoginPages';
 
 
 export default function App() {
   return (
+    
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Main" component={MainTabNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="OrderDetail" component={OrderDetailPage} />
-        <Stack.Screen name="FoodMenu" component={FoodMenuPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Main" component={MainTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailPage} />
+      <Stack.Screen name="FoodMenu" component={FoodMenuPage} />
+      <Stack.Screen name="Login" component={LoginPages} />
+    </Stack.Navigator>
+  </NavigationContainer>
   );
 }
 
