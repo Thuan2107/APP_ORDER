@@ -15,7 +15,8 @@ import Toast from 'react-native-toast-message';
 import HeaderBackPress from "../../../components/HeaderBackPress";
 import { ORDER_STATUS } from "../../../constants/OrderStatusConstants";
 import { useRoute } from "@react-navigation/native";
-
+import { MenuRequestParams, getMenu } from "../api/getFoodMenuApi";
+import { showToast } from "../../../utils/showToastMessage";
 const FoodMenuPage = () => {
     const route = useRoute<any>();
     const { orderId, orderName } = route.params;
@@ -39,58 +40,63 @@ const FoodMenuPage = () => {
     const handleItemPlus = (id: number) => {
         setListFood(prevList =>
             prevList.map(item =>
-                item.id === id ? { ...item, quantity: (item.quantity ?? 0) + 1,isChecked: true } : item
+                item.id === id ? { ...item, quantity: (item.quantity ?? 0) + 1, isChecked: true } : item
             )
         );
     };
 
     const handleItemMinus = (id: number) => {
-        setListFood(prevList =>
-            prevList.map(item =>
-                item.id === id ? { ...item, quantity: Math.max((item.quantity ?? 0) - 1, 0) } : item
-            )
-        );
+        setListFood(prevList => {
+            const updatedList = prevList.map(item => {
+                if (item.id === id) {
+                    const newQuantity = Math.max((item.quantity ?? 0) - 1, 0);
+                    // Set isCheck to 0 if quantity is 0
+                    return { ...item, quantity: newQuantity, isChecked: newQuantity !== 0};
+                }
+                return item;
+            });
+    
+            return updatedList;
+        });
     };
 
     useEffect(() => {
         const loadData = async () => {
-          try {
-            const data = await getOrderDetail();
-            setListFood(data.data.list)
-          } catch (err) {
-          }
+            try {
+                const data = await fetchMenu();
+                setListFood(data?.data.list || [])
+                
+            } catch (err) {
+                
+            }
         };
-    
+
         loadData();
-      }, []);
+        
+    }, []);
     
       
       
-      const getOrderDetail = async () => {
+      const fetchMenu = async () => {
+        const params: MenuRequestParams = {
+          key_search: "",
+          category_id: -1,
+          branch_id: 2879,
+          is_allow_employee_gift: -1,
+          is_get_restaurant_kitchen_place: -1,
+          limit: 50,
+          category_type: -1,
+          is_out_stock: -1,
+          page: 1,
+          area_id: 5897,
+          status: 1,
+        };
+      
         try {
-          const response = await axiosInstance.get(`/foods/menu`, {
-            params: {
-                key_search : "",
-                category_id : -1,
-                branch_id : 2879,
-                is_allow_employee_gift : -1,
-                is_get_restaurant_kitchen_place : -1,
-                limit : 50,
-                category_type : -1,
-                is_out_stock : -1,
-                page : 1,
-                area_id : 5897,
-                status : 1
-            },
-            headers: {
-              Method: '0', // Custom header for Method
-            },
-          });
+          const response = await getMenu(params);
           return response.data;
         } catch (error) {
-          // Handle error as needed
-          console.error('API call error:', error);
-          throw error;
+          console.error(error); // Handle the error
         }
       };
     const renderItem: ListRenderItem<Food> = ({ item }) => (
@@ -321,3 +327,4 @@ const styleItemFood = StyleSheet.create({
 })
 
 export default FoodMenuPage
+

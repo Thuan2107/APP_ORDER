@@ -15,6 +15,7 @@ export type ItemCardProps = {
 
 const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
   const navigation = useNavigation<any>();
+
   const [tables, setTables] = useState<TableModel[]>([]);
   useEffect(() => {
     const loadOrders = async () => {

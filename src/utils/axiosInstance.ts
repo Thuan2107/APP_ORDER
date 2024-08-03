@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
 
 // Create an axios instance with default configurations
 const axiosInstance: AxiosInstance = axios.create({
@@ -17,10 +17,10 @@ axiosInstance.interceptors.request.use(
 
     if (authToken) {
       config.headers = {
-        ...(config.headers as AxiosRequestHeaders), // Assert type to `AxiosRequestHeaders`
+        ...config.headers,
         Authorization: `Bearer ${authToken}`,
         ProjectId: projectId,
-      } as AxiosRequestHeaders; // Ensure headers is treated as AxiosRequestHeaders
+      } as AxiosRequestHeaders;
     }
 
     return config;

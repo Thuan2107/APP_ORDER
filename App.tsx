@@ -18,12 +18,11 @@ import Toast from 'react-native-toast-message';
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetail" component={OrderDetailPage} />
         <Stack.Screen name="FoodMenu" component={FoodMenuPage} />
       </Stack.Navigator>
-      <Toast ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 }
