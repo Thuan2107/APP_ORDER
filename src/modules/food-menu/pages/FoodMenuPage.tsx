@@ -14,21 +14,23 @@ import { formatPriceVND } from "../../../utils/appUtils";
 import Toast from 'react-native-toast-message';
 import HeaderBackPress from "../../../components/HeaderBackPress";
 import { ORDER_STATUS } from "../../../constants/OrderStatusConstants";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { MenuRequestParams, getMenu } from "../api/getFoodMenuApi";
 import { showToast } from "../../../utils/showToastMessage";
 import { AddFoodRequestBody, FoodModelToAdd, addFoodApi } from "../api/addFoodApi";
 import { setAuthToken, setProjectId } from "../../../utils/config";
+import { OpenTableBody, openTableApi } from "../api/openTableApi";
 const FoodMenuPage = () => {
+    const navigation = useNavigation<any>();
     const route = useRoute<any>();
-    const { orderId, orderName } = route.params;
+    const { orderId, orderName, tableId } = route.params;
     const [listFood, setListFood] = useState<Food[]>([])
     const [isChecked, setIsChecked] = useState(false);
     const isAddFood = listFood.find((food) => food.isChecked)
     const orderStatusColor = ORDER_STATUS[0].colorText
     const [listFoodToAdd, setListFoodToAdd] = useState<FoodModelToAdd[]>([])
     setAuthToken('ba1c572e-751f-4899-a2b9-643a82f2193b');
-    setProjectId('8005');       
+    setProjectId('8005');   
     const handleCheckToggle = (id: number) => {
         setListFood(prevList =>
             prevList.map(item =>
@@ -135,12 +137,41 @@ const FoodMenuPage = () => {
             foods: listFoodToAdd,
             branch_id: 2879
         }
-
         try {
             const response = await addFoodApi(orderId, body);
+            if(response.status == 200){
+                console.log('Theme mon thanh cong');
+                navigation.navigate('OrderDetail', { orderId });
+            }
             return response.data;
         } catch (error) {
             console.error(error); // Handle the error
+        }
+    }
+
+    const callApiOpenTable = async (tableId: number) => {
+        const body: OpenTableBody = {
+            branch_id: 2879
+        }
+        try {
+            const response = await openTableApi(tableId, body);
+            if(response.status == 200){
+                callApiAddFood(response.data.data.order_id)
+            }
+        } catch (error) {
+            console.error(error); // Handle the error
+        }
+    }
+
+    const handleActionAddFood = (type: number) => {
+        if(type == 0){
+            navigation.goBack()
+        }else{
+            if(orderId == 0){
+                callApiOpenTable(tableId)
+            }else{
+                callApiAddFood(orderId)
+            }
         }
     }
 
@@ -170,9 +201,12 @@ const FoodMenuPage = () => {
                     keyExtractor={item => item.id.toString()}
                     />
             </View>
-            {isAddFood && <ActionBottom />}
+            {isAddFood && <ActionBottom onActionAddFood={handleActionAddFood} />}
         </View>
     )
+}
+type ActionProps = {
+    onActionAddFood: (type: number) => void;
 }
 
 
@@ -231,14 +265,14 @@ const ItemFood = ({
     )
 }
 
-const ActionBottom = () => {
+const ActionBottom = ({onActionAddFood}: ActionProps) => {
     return (
         <View style={styleItemFood.actionBottomWrapper}>
-            <TouchableOpacity style={[styleItemFood.actionButton, {backgroundColor: '#F1F2F5'}]}>
+            <TouchableOpacity onPress={() => onActionAddFood(0)} style={[styleItemFood.actionButton, {backgroundColor: '#F1F2F5'}]}>
                 <IconCancel24 style={styleItemFood.actionIcon} />
                 <Text style={[styleItemFood.actionName, {color: '#F7002E'}]}>huỷ</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styleItemFood.actionButton, {backgroundColor: '#FF8B00'}]}>
+            <TouchableOpacity onPress={() => onActionAddFood(1)} style={[styleItemFood.actionButton, {backgroundColor: '#FF8B00'}]}>
                 <IconCheck24 style={styleItemFood.actionIcon} />
                 <Text style={[styleItemFood.actionName, {color: '#FFFFFF'}]}>đồng ý</Text>
             </TouchableOpacity>

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native';
 import HeaderBackPress from '../../../components/HeaderBackPress';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import IconCoin from '../../../../assets/icon-coins.svg';
 import { ORDER_STATUS } from '../../../constants/OrderStatusConstants';
 import imageFoodDefault from '../../../../assets/food-default.png'
@@ -37,16 +37,20 @@ const OrderDetailPage = () => {
 
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await getOrderDetail();
-        setOrderDetail(data.data)
-      } catch (err) {
-      }
-    };
 
-    loadData();
+    
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Fetch data and dispatch to Redux store
+      getOrderDetail().then(data => {
+        console.log('detail')
+        setOrderDetail(data.data)
+      }
+      );
+    }, [])
+  );
 
   useEffect(() => {
     initOrderDetailData(orderDetail)
@@ -312,13 +316,13 @@ const ActionBottom = ({backgroundStatusColor, orderStatusColor, orderDetailData}
   const actionFromOrderDetail = (type: number) => {
     switch(type){
       case TYPE_ACTION_ORDER_DETAIL.ADD_FOOD: {
-        navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name });
+        navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name, tableId: orderDetailData?.table_id });
         break;
       }
-      case TYPE_ACTION_ORDER_DETAIL.ADD_FOOD: {
-        navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name });
-        break;
-      }
+      // case TYPE_ACTION_ORDER_DETAIL.ADD_FOOD: {
+      //   navigation.navigate('FoodMenu', { orderId: orderDetailData?.id, orderName: orderDetailData?.table_name });
+      //   break;
+      // }
     }
   }
   return (

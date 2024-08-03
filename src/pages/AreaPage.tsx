@@ -6,6 +6,7 @@ import { TABLE_STATUS } from '../constants/TableStatusConstants';
 import { useNavigation } from '@react-navigation/native';
 import { TableRequestParams, getTableApi } from '../modules/area/api/getTablesApi';
 import { setAuthToken, setProjectId } from '../utils/config';
+import { showToast } from '../utils/showToastMessage';
 
 
 
@@ -16,15 +17,14 @@ export type ItemCardProps = {
 };
 
 const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
-  const navigation = useNavigation<any>();
   setAuthToken('ba1c572e-751f-4899-a2b9-643a82f2193b');
-  setProjectId('8005');  
+
+  const navigation = useNavigation<any>();
   const [tables, setTables] = useState<TableModel[]>([]);
   useEffect(() => {
     const loadTables = async () => {
       try {
         const data = await fetchTables();
-        console.log('data', data)
         setTables(data?.data ?? [])
       } catch (err) {
       }
@@ -39,7 +39,6 @@ const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => 
       branch_id: 2879,
       buffet_ticket_id: 0,
     };
-    
     try {
         const response = await getTableApi(params);
         return response.data;
@@ -47,11 +46,11 @@ const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => 
         console.error(error); // Handle the error
     }
 };
-  const onTableItemClick = (orderId: number, orderName: string) => {
+  const onTableItemClick = (orderId: number, orderName: string, tableId: number) => {
     if(orderId){
       navigation.navigate('OrderDetail', { orderId });
     }else{
-      navigation.navigate('FoodMenu', { orderId, orderName });
+      navigation.navigate('FoodMenu', { orderId, orderName, tableId });
     }
   }
 
@@ -63,7 +62,7 @@ const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => 
       <TableItemCard
         backgroundColor={TABLE_STATUS[item.status].color}
         tableName={item.name}
-        onTableClick={() => onTableItemClick(item.order_id, item.name)}
+        onTableClick={() => onTableItemClick(item.order_id, item.name, item.id)}
       />
     </View>
   );

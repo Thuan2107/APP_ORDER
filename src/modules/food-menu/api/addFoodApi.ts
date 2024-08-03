@@ -36,7 +36,8 @@ export const addFoodApi = async (orderId: number, body: AddFoodRequestBody): Pro
     const url = `/orders/${orderId}/add-food`
     const headers = {
       Method: '1', // Custom header for Method
+      ProjectId: 8005
     };
   
-    return await axiosInstance.post<AddFoodResponse>(url, { body, headers} );
+    return await axiosInstance.post<AddFoodResponse>(url, body, {headers} );
   };

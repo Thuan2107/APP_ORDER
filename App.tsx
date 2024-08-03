@@ -14,9 +14,12 @@ import OrderDetailPage from './src/modules/order/pages/OrderDetailPage';
 import FoodMenuPage from './src/modules/food-menu/pages/FoodMenuPage';
 import LoginPage from './src/modules/login/pages/LoginPages';
 import Toast from 'react-native-toast-message';
+import { setAuthToken, setProjectId } from './src/utils/config';
 
 
 export default function App() {
+  
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">

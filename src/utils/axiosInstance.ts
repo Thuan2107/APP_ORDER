@@ -14,13 +14,12 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     const authToken = getAuthToken(); // Get authToken from configuration
-    const projectId = getProjectId(); // Get projectId from configuration
 
     if (authToken) {
       config.headers = {
         ...config.headers,
+        ProjectId : config.headers.ProjectId ?? 8005,
         Authorization: `Bearer ${authToken}`,
-        ProjectId: projectId,
       } as AxiosRequestHeaders;
     }
 
