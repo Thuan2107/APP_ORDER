@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import { getAuthToken, getProjectId } from './config';
 
 // Create an axios instance with default configurations
 const axiosInstance: AxiosInstance = axios.create({
@@ -9,11 +10,11 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-// Add a request interceptor to include default headers
+// Add a request interceptor to include default headers and log requests
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const authToken = getAuthToken(); // Lấy authToken từ cấu hình
-    const projectId = getProjectId(); // Lấy projectId từ cấu hình
+    const authToken = getAuthToken(); // Get authToken from configuration
+    const projectId = getProjectId(); // Get projectId from configuration
 
     if (authToken) {
       config.headers = {
@@ -23,9 +24,23 @@ axiosInstance.interceptors.request.use(
       } as AxiosRequestHeaders;
     }
 
+    // Log request details
+    console.log('Starting Request', {
+      baseURL: config.baseURL,
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      params: config.params,
+      data: config.data,
+    });
+
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    // Log request error
+    console.error('Request Error', error);
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;

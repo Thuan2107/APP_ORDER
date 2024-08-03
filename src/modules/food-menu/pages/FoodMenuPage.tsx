@@ -18,6 +18,7 @@ import { useRoute } from "@react-navigation/native";
 import { MenuRequestParams, getMenu } from "../api/getFoodMenuApi";
 import { showToast } from "../../../utils/showToastMessage";
 import { AddFoodRequestBody, FoodModelToAdd, addFoodApi } from "../api/addFoodApi";
+import { setAuthToken, setProjectId } from "../../../utils/config";
 const FoodMenuPage = () => {
     const route = useRoute<any>();
     const { orderId, orderName } = route.params;
@@ -26,6 +27,8 @@ const FoodMenuPage = () => {
     const isAddFood = listFood.find((food) => food.isChecked)
     const orderStatusColor = ORDER_STATUS[0].colorText
     const [listFoodToAdd, setListFoodToAdd] = useState<FoodModelToAdd[]>([])
+    setAuthToken('ba1c572e-751f-4899-a2b9-643a82f2193b');
+    setProjectId('8005');       
     const handleCheckToggle = (id: number) => {
         setListFood(prevList =>
             prevList.map(item =>
@@ -76,8 +79,14 @@ const FoodMenuPage = () => {
         loadData();
         
     }, []);
+
+    useEffect(() => {
+        const listFoodAddNew = mapToListFoodAdd(listFood);
+        setListFoodToAdd(listFoodAddNew)
+        console.log('listFoodAddNew', listFoodAddNew)
+    }, [listFood]);
     
-    const handleListFoodToAdd = (listFoodMenu: Food[]): FoodModelToAdd[] => {
+    const mapToListFoodAdd = (listFoodMenu: Food[]): FoodModelToAdd[] => {
         const foodToAdd: FoodModelToAdd[]  = listFoodMenu.filter(foodMenu => foodMenu.isChecked).map(foodMenu => ({
             food_name: foodMenu.name,
             note: '',

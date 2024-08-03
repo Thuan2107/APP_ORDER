@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { TABLE_STATUS } from '../constants/TableStatusConstants';
 import { useNavigation } from '@react-navigation/native';
+import { TableRequestParams, getTableApi } from '../modules/area/api/getTablesApi';
+import { setAuthToken, setProjectId } from '../utils/config';
 
 
 
@@ -15,41 +17,36 @@ export type ItemCardProps = {
 
 const AreaPage = ({backgroundColor, textColor, defaultColor}: ItemCardProps) => {
   const navigation = useNavigation<any>();
-
+  setAuthToken('ba1c572e-751f-4899-a2b9-643a82f2193b');
+  setProjectId('8005');  
   const [tables, setTables] = useState<TableModel[]>([]);
   useEffect(() => {
-    const loadOrders = async () => {
+    const loadTables = async () => {
       try {
         const data = await fetchTables();
-        
-        setTables(data.data)
+        console.log('data', data)
+        setTables(data?.data ?? [])
       } catch (err) {
       }
     };
 
-    loadOrders();
+    loadTables();
   }, []);
   
   const fetchTables = async () => {
+    const params: TableRequestParams = {
+      area_id: -1,
+      branch_id: 2879,
+      buffet_ticket_id: 0,
+    };
+    
     try {
-      const response = await axiosInstance.get('/tables', {
-        params: {
-          area_id: -1,
-          branch_id: 2879,
-          buffet_ticket_id: 0,
-        },
-        headers: {
-          Method: '0', // Custom header for Method
-        },
-      });
-      return response.data;
+        const response = await getTableApi(params);
+        return response.data;
     } catch (error) {
-      // Handle error as needed
-      console.error('API call error:', error);
-      throw error;
+        console.error(error); // Handle the error
     }
-  };
-
+};
   const onTableItemClick = (orderId: number, orderName: string) => {
     if(orderId){
       navigation.navigate('OrderDetail', { orderId });
